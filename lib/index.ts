@@ -4,6 +4,7 @@ import {
   transferObjToList,
   functionParser,
   getUuid,
+  getValueByPath,
 } from "./utils/common";
 import { ListItem } from "./utils/common/transferObjToList";
 import {
@@ -51,7 +52,7 @@ export class Executor {
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  async run(setNetwork: any, step = 0, continuousExecution = true) {
+  async run(setActionNetwork: any, step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
         this.logs.push({
@@ -81,7 +82,7 @@ export class Executor {
           message: "Workflow start running.",
         });
       }
-
+      console.log(step);
       const { key, value, path } = this.executeList[step];
       // replace variables
       if (typeof value === "string" && value.startsWith("$")) {
@@ -95,15 +96,16 @@ export class Executor {
 
       // return network
       if (key === "network") {
-        setNetwork(value);
+        setActionNetwork(value);
       }
 
       // interact contract
       if (key === "action") {
-        if (this.context.network === "solana") {
+        const pathValue = getValueByPath(this.context, path);
+        const action = pathValue && pathValue[key];
+        if (action?.network === "solana") {
           await interactContractSolana(
-            key,
-            path,
+            action,
             this.context,
             this.abiOrIdl,
             this.provider,
@@ -113,8 +115,7 @@ export class Executor {
           );
         } else {
           await interactContractEvm(
-            key,
-            path,
+            action,
             this.context,
             this.abiOrIdl,
             this.provider,

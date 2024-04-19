@@ -1,14 +1,11 @@
-import { getValueByPath } from "../../common";
 import { Contract } from "ethers";
-import ERC20 from "../../../abis/erc20.json";
 import { Web3Provider } from "@ethersproject/providers";
 import { isNormalObject } from "../../common";
 import { logItem } from "../../..";
 import { validateFuncAndParams } from "./validateFuncAndParams";
 
 const interactContractEvm = async (
-  key: string,
-  path: string,
+  action: any,
   context: Record<string, any>,
   abiOrIdl: Record<string, any[] | Record<string, any>>,
   provider: any,
@@ -16,9 +13,7 @@ const interactContractEvm = async (
   logs: logItem[],
   uuid: string
 ) => {
-  const pathValue = getValueByPath(context, path);
-  if (pathValue) {
-    const action = pathValue[key];
+  if (action) {
     const library = new Web3Provider(provider);
     const signer = library.getSigner(account).connectUnchecked();
     let res;

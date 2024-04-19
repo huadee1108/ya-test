@@ -15,13 +15,12 @@ import {
   getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
 import * as anchor from "@project-serum/anchor";
-import { getValueByPath, isNormalObject } from "../../common";
+import { isNormalObject } from "../../common";
 import { logItem } from "../../..";
 import { validateFuncAndParams } from "./validateFuncAndParams";
 
 const interactContractSolana = async (
-  key: string,
-  path: string,
+  action: any,
   context: Record<string, any>,
   abiOrIdl: Record<string, any[] | Record<string, any>>,
   provider: any,
@@ -29,10 +28,7 @@ const interactContractSolana = async (
   logs: logItem[],
   uuid: string
 ) => {
-  const pathValue = getValueByPath(context, path);
-  if (pathValue) {
-    const action = pathValue[key];
-
+  if (action) {
     const connection = new Connection(solanaRpc);
     let res;
     if (action.protocol === "NativeToken") {
