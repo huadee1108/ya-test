@@ -1,0 +1,36 @@
+{
+  "name": "bql-executor",
+  "version": "1.0.0",
+  "description": "Blockchain Quest Language Executor",
+  "main": "build/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "up": "npm version patch",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenBQL/bql-executor-js.git"
+  },
+  "author": "Hardy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenBQL/bql-executor-js/issues"
+  },
+  "homepage": "https://github.com/OpenBQL/bql-executor-js#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "@project-serum/anchor": "^0.26.0",
+    "@solana/spl-token": "^0.4.3",
+    "@solana/web3.js": "^1.91.4",
+    "bignumber.js": "^9.1.2",
+    "ethers": "^5.6.4",
+    "js-yaml": "^4.1.0"
+  }
+}
