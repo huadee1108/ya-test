@@ -1,7 +1,7 @@
 {
-  "name": "ya-test",
+  "name": "test-ya",
   "version": "1.0.0",
-  "description": "Ya Test",
+  "description": "Test Ya",
   "main": "build/index.js",
   "type": "module",
   "scripts": {
