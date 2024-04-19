@@ -10,7 +10,7 @@ import { ListItem } from "./utils/common/transferObjToList";
 //   interactContractEvm,
 //   interactContractSolana,
 // } from "./utils/interactContract";
-import { publicVariable } from "./config";
+import { publicVariable } from "./config/index.js";
 
 export interface logItem {
   type: "start" | "end" | "action" | "error";
