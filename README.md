@@ -1,2 +1,3 @@
-# bql-executor-js
-BQL Executor SDK for Javascript
+# ya-test
+
+ya-test
