@@ -4,13 +4,12 @@ import {
   transferObjToList,
   functionParser,
   getUuid,
-  getValueByPath,
 } from "./utils/common";
 import { ListItem } from "./utils/common/transferObjToList";
-import {
-  interactContractEvm,
-  interactContractSolana,
-} from "./utils/interactContract";
+// import {
+//   interactContractEvm,
+//   interactContractSolana,
+// } from "./utils/interactContract";
 import { publicVariable } from "./config";
 
 export interface logItem {
@@ -100,31 +99,31 @@ export class Executor {
       }
 
       // interact contract
-      if (key === "action") {
-        const pathValue = getValueByPath(this.context, path);
-        const action = pathValue && pathValue[key];
-        if (action?.network === "solana") {
-          await interactContractSolana(
-            action,
-            this.context,
-            this.abiOrIdl,
-            this.provider,
-            this.solanaRpc,
-            this.logs,
-            this.uuid
-          );
-        } else {
-          await interactContractEvm(
-            action,
-            this.context,
-            this.abiOrIdl,
-            this.provider,
-            this.account,
-            this.logs,
-            this.uuid
-          );
-        }
-      }
+      // if (key === "action") {
+      //   const pathValue = getValueByPath(this.context, path);
+      //   const action = pathValue && pathValue[key];
+      //   if (action?.network === "solana") {
+      //     await interactContractSolana(
+      //       action,
+      //       this.context,
+      //       this.abiOrIdl,
+      //       this.provider,
+      //       this.solanaRpc,
+      //       this.logs,
+      //       this.uuid
+      //     );
+      //   } else {
+      //     await interactContractEvm(
+      //       action,
+      //       this.context,
+      //       this.abiOrIdl,
+      //       this.provider,
+      //       this.account,
+      //       this.logs,
+      //       this.uuid
+      //     );
+      //   }
+      // }
 
       if (continuousExecution) {
         step += 1;
