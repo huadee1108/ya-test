@@ -1,10 +1,10 @@
 import yaml from "js-yaml";
-import {
-  replaceVariables,
-  transferObjToList,
-  functionParser,
-  getUuid,
-} from "./utils/common";
+// import {
+//   replaceVariables,
+//   transferObjToList,
+//   functionParser,
+//   getUuid,
+// } from "./utils/common";
 import { ListItem } from "./utils/common/transferObjToList";
 // import {
 //   interactContractEvm,
@@ -48,8 +48,8 @@ export class Executor {
     this.provider = provider;
     this.account = account;
     this.solanaRpc = solanaRpc || "";
-    this.uuid = getUuid();
-    this.executeList = transferObjToList(this.context);
+    // this.uuid = getUuid();
+    // this.executeList = transferObjToList(this.context);
   }
   async run(setActionNetwork: any, step = 0, continuousExecution = true) {
     try {
@@ -84,14 +84,14 @@ export class Executor {
       console.log(step);
       const { key, value, path } = this.executeList[step];
       // replace variables
-      if (typeof value === "string" && value.startsWith("$")) {
-        replaceVariables(key, value, path, this.context);
-      }
+      // if (typeof value === "string" && value.startsWith("$")) {
+      //   replaceVariables(key, value, path, this.context);
+      // }
 
-      // function parsing
-      if (typeof key === "string" && key.startsWith("_")) {
-        functionParser(key, path, this.context);
-      }
+      // // function parsing
+      // if (typeof key === "string" && key.startsWith("_")) {
+      //   functionParser(key, path, this.context);
+      // }
 
       // return network
       if (key === "network") {
