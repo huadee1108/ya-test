@@ -85,7 +85,7 @@ export class Executor {
           message: "Workflow start running.",
         });
       }
-      console.log(step);
+
       const { key, value, path } = this.executeList[step];
       // replace variables
       if (typeof value === "string" && value.startsWith("$")) {
@@ -163,7 +163,7 @@ export class Executor {
   }
   resume() {
     this.isPause = false;
-    this.run(this.currentStep);
+    this.run(this.currentStep + 1);
   }
   stop() {
     this.isStop = true;
