@@ -102,12 +102,11 @@ export class Executor {
       // return network
       if (key === "network") {
         this.setActionNetwork(value);
-        await delay(100);
+        // await delay(100);
       }
 
       // interact contract
       if (key === "action") {
-        console.log("xxxxx");
         const pathValue = getValueByPath(this.context, path);
         const action = pathValue && pathValue[key];
         if (action?.network === "solana") {
