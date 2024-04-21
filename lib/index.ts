@@ -56,7 +56,7 @@ export class Executor {
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  run = async (step = 0, continuousExecution = true) => {
+  async run(step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
         this.logs.push({
@@ -159,7 +159,7 @@ export class Executor {
       // throw the bottom-level message
       throw new Error(error?.data?.message || error?.message || error);
     }
-  };
+  }
   pause() {
     this.isPause = true;
   }
