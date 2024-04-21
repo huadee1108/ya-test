@@ -68,7 +68,7 @@ export class Executor {
         });
         return;
       }
-      console.log(step);
+      console.log(step, this.isPause);
       this.currentStep = step;
       if (this.isPause) return;
       if (this.isStop) {
@@ -102,12 +102,11 @@ export class Executor {
       // return network
       if (key === "network") {
         this.setActionNetwork(value);
-        await delay(500);
       }
 
       // interact contract
       if (key === "action") {
-        console.log("xxxx");
+        console.log("xx");
         const pathValue = getValueByPath(this.context, path);
         const action = pathValue && pathValue[key];
         if (action?.network === "solana") {
