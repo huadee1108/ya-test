@@ -68,7 +68,7 @@ export class Executor {
         return;
       }
       this.currentStep = step;
-      console.log(step, this.isPause);
+      console.log(step, this.isPause, this.isStop);
       if (this.isPause) return;
       if (this.isStop) {
         this.isStop = false;
