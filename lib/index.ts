@@ -1,15 +1,16 @@
 import yaml from "js-yaml";
-// import {
-//   replaceVariables,
-//   transferObjToList,
-//   functionParser,
-//   getUuid,
-// } from "./utils/common";
-import { ListItem } from "./utils/common/transferObjToList";
-// import {
-//   interactContractEvm,
-//   interactContractSolana,
-// } from "./utils/interactContract";
+import {
+  replaceVariables,
+  transferObjToList,
+  functionParser,
+  getUuid,
+  getValueByPath,
+} from "./utils/common/index.js";
+import { ListItem } from "./utils/common/transferObjToList.js";
+import {
+  interactContractEvm,
+  interactContractSolana,
+} from "./utils/interactContract/index.js";
 import { publicVariable } from "./config/index.js";
 
 export interface logItem {
@@ -48,8 +49,8 @@ export class Executor {
     this.provider = provider;
     this.account = account;
     this.solanaRpc = solanaRpc || "";
-    // this.uuid = getUuid();
-    // this.executeList = transferObjToList(this.context);
+    this.uuid = getUuid();
+    this.executeList = transferObjToList(this.context);
   }
   async run(setActionNetwork: any, step = 0, continuousExecution = true) {
     try {
@@ -84,14 +85,14 @@ export class Executor {
       console.log(step);
       const { key, value, path } = this.executeList[step];
       // replace variables
-      // if (typeof value === "string" && value.startsWith("$")) {
-      //   replaceVariables(key, value, path, this.context);
-      // }
+      if (typeof value === "string" && value.startsWith("$")) {
+        replaceVariables(key, value, path, this.context);
+      }
 
-      // // function parsing
-      // if (typeof key === "string" && key.startsWith("_")) {
-      //   functionParser(key, path, this.context);
-      // }
+      // function parsing
+      if (typeof key === "string" && key.startsWith("_")) {
+        functionParser(key, path, this.context);
+      }
 
       // return network
       if (key === "network") {
@@ -99,31 +100,31 @@ export class Executor {
       }
 
       // interact contract
-      // if (key === "action") {
-      //   const pathValue = getValueByPath(this.context, path);
-      //   const action = pathValue && pathValue[key];
-      //   if (action?.network === "solana") {
-      //     await interactContractSolana(
-      //       action,
-      //       this.context,
-      //       this.abiOrIdl,
-      //       this.provider,
-      //       this.solanaRpc,
-      //       this.logs,
-      //       this.uuid
-      //     );
-      //   } else {
-      //     await interactContractEvm(
-      //       action,
-      //       this.context,
-      //       this.abiOrIdl,
-      //       this.provider,
-      //       this.account,
-      //       this.logs,
-      //       this.uuid
-      //     );
-      //   }
-      // }
+      if (key === "action") {
+        const pathValue = getValueByPath(this.context, path);
+        const action = pathValue && pathValue[key];
+        if (action?.network === "solana") {
+          await interactContractSolana(
+            action,
+            this.context,
+            this.abiOrIdl,
+            this.provider,
+            this.solanaRpc,
+            this.logs,
+            this.uuid
+          );
+        } else {
+          await interactContractEvm(
+            action,
+            this.context,
+            this.abiOrIdl,
+            this.provider,
+            this.account,
+            this.logs,
+            this.uuid
+          );
+        }
+      }
 
       if (continuousExecution) {
         step += 1;
