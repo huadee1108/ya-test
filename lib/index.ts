@@ -68,8 +68,8 @@ export class Executor {
         });
         return;
       }
+      console.log(step);
       this.currentStep = step;
-      console.log(step, this.isPause, this.isStop);
       if (this.isPause) return;
       if (this.isStop) {
         this.isStop = false;
@@ -132,7 +132,8 @@ export class Executor {
       }
 
       if (continuousExecution) {
-        await this.run(step + 1);
+        const nextStep = step + 1;
+        await this.run(nextStep);
       }
     } catch (error: any) {
       const notError =
