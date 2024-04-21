@@ -52,7 +52,7 @@ export class Executor {
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  async run(setActionNetwork: any, step = 0, continuousExecution = true) {
+  async run(step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
         this.logs.push({
@@ -82,7 +82,7 @@ export class Executor {
           message: "Workflow start running.",
         });
       }
-      // console.log(step);
+      console.log(step);
       const { key, value, path } = this.executeList[step];
       // replace variables
       if (typeof value === "string" && value.startsWith("$")) {
