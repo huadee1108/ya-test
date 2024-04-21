@@ -51,36 +51,35 @@ const interactContractEvm = async (
         if (hasValue) params.push({ value: action.value });
         res = await contractObj?.[action.call]?.(...params);
       }
-
-      if (res?.hash) {
-        const receipt = await library.waitForTransaction(res.hash);
-        action.txid = res.hash;
-        if (receipt?.status === 1) {
-          action.status = "completed";
-        } else {
-          action.status = "failed";
-        }
+    }
+    if (res?.hash) {
+      const receipt = await library.waitForTransaction(res.hash);
+      action.txid = res.hash;
+      if (receipt?.status === 1) {
+        action.status = "completed";
       } else {
-        if (action.return && Array.isArray(action.return)) {
-          for (const obj of action.return) {
-            if (isNormalObject(obj)) {
-              const value = Array.isArray(res)
-                ? res.map((item) => item.toString())
-                : res?.toString();
-              context[Object.keys(obj)[0]] = value;
-              obj[Object.keys(obj)[0]] = value;
-            }
+        action.status = "failed";
+      }
+    } else {
+      if (action.return && Array.isArray(action.return)) {
+        for (const obj of action.return) {
+          if (isNormalObject(obj)) {
+            const value = Array.isArray(res)
+              ? res.map((item) => item.toString())
+              : res?.toString();
+            context[Object.keys(obj)[0]] = value;
+            obj[Object.keys(obj)[0]] = value;
           }
         }
       }
-      logs.push({
-        type: "action",
-        timeStamp: Date.now(),
-        runId: uuid,
-        code: action,
-        message: JSON.stringify(action, null, 2),
-      });
     }
+    logs.push({
+      type: "action",
+      timeStamp: Date.now(),
+      runId: uuid,
+      code: action,
+      message: JSON.stringify(action, null, 2),
+    });
   }
 };
 

@@ -52,7 +52,7 @@ export class Executor {
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  async run(step = 0, continuousExecution = true) {
+  async run(setActionNetwork: any, step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
         this.logs.push({
