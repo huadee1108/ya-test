@@ -33,12 +33,14 @@ export class Executor {
   isPause: boolean = false;
   isStop: boolean = false;
   uuid: string = "";
+  setActionNetwork: any;
   logs: logItem[] = [];
   constructor(
     bql: string,
     abiOrIdl: Record<string, any[] | Record<string, any>>,
     provider: any,
     account: string,
+    setActionNetwork: any,
     solanaRpc?: string
   ) {
     this.bql = bql;
@@ -48,11 +50,12 @@ export class Executor {
     this.abiOrIdl = abiOrIdl;
     this.provider = provider;
     this.account = account;
+    this.setActionNetwork = setActionNetwork;
     this.solanaRpc = solanaRpc || "";
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  async run(setActionNetwork: any, step = 0, continuousExecution = true) {
+  async run(step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
         this.logs.push({
@@ -96,7 +99,7 @@ export class Executor {
 
       // return network
       if (key === "network") {
-        setActionNetwork(value);
+        this.setActionNetwork(value);
       }
 
       // interact contract
@@ -128,7 +131,7 @@ export class Executor {
 
       if (continuousExecution) {
         step += 1;
-        await this.run(setActionNetwork, step);
+        await this.run(step);
       }
     } catch (error: any) {
       const notError =
