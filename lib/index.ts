@@ -102,6 +102,7 @@ export class Executor {
       // return network
       if (key === "network") {
         this.setActionNetwork(value);
+        await delay(500);
       }
 
       // interact contract
