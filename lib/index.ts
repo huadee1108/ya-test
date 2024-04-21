@@ -5,6 +5,7 @@ import {
   functionParser,
   getUuid,
   getValueByPath,
+  delay,
 } from "./utils/common/index.js";
 import { ListItem } from "./utils/common/transferObjToList.js";
 import {
@@ -101,7 +102,7 @@ export class Executor {
       // return network
       if (key === "network") {
         this.setActionNetwork(value);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await delay(100);
       }
 
       // interact contract
@@ -112,7 +113,6 @@ export class Executor {
         if (action?.network === "solana") {
           await interactContractSolana(
             action,
-            this.context,
             this.abiOrIdl,
             this.provider,
             this.solanaRpc,

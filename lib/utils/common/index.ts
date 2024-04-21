@@ -5,6 +5,7 @@ import functionParser from "./functionParser.js";
 import isNormalObject from "./isNormalObject.js";
 import getParentValueAndKeyByPath from "./getParentValueAndKeyByPath.js";
 import getUuid from "./getUuid.js";
+import delay from "./delay.js";
 
 export {
   getValueByPath,
@@ -14,4 +15,5 @@ export {
   isNormalObject,
   getParentValueAndKeyByPath,
   getUuid,
+  delay,
 };

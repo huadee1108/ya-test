@@ -21,7 +21,6 @@ import { validateFuncAndParams } from "./validateFuncAndParams.js";
 
 const interactContractSolana = async (
   action: any,
-  context: Record<string, any>,
   abiOrIdl: Record<string, any[] | Record<string, any>>,
   provider: any,
   solanaRpc: string,
