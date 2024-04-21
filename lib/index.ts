@@ -95,9 +95,9 @@ export class Executor {
       }
 
       // return network
-      if (key === "network") {
-        setActionNetwork(value);
-      }
+      // if (key === "network") {
+      //   setActionNetwork(value);
+      // }
 
       // interact contract
       if (key === "action") {
