@@ -95,9 +95,9 @@ export class Executor {
       }
 
       // return network
-      // if (key === "network") {
-      //   setActionNetwork(value);
-      // }
+      if (key === "network") {
+        setActionNetwork(value);
+      }
 
       // interact contract
       if (key === "action") {
@@ -128,7 +128,7 @@ export class Executor {
 
       if (continuousExecution) {
         step += 1;
-        await this.run(step);
+        await this.run(setActionNetwork, step);
       }
     } catch (error: any) {
       const notError =
