@@ -15,9 +15,9 @@ import {
   getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
 import * as anchor from "@project-serum/anchor";
-import { isNormalObject } from "../../common";
-import { logItem } from "../../..";
-import { validateFuncAndParams } from "./validateFuncAndParams";
+import { isNormalObject } from "../../common/index.js";
+import { logItem } from "../../../index.js";
+import { validateFuncAndParams } from "./validateFuncAndParams.js";
 
 const interactContractSolana = async (
   action: any,

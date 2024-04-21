@@ -1,8 +1,8 @@
 import { Contract } from "ethers";
 import { Web3Provider } from "@ethersproject/providers";
-import { isNormalObject } from "../../common";
-import { logItem } from "../../..";
-import { validateFuncAndParams } from "./validateFuncAndParams";
+import { isNormalObject } from "../../common/index.js";
+import { logItem } from "../../../index.js";
+import { validateFuncAndParams } from "./validateFuncAndParams.js";
 
 const interactContractEvm = async (
   action: any,
