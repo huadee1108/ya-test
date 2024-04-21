@@ -1,6 +1,6 @@
 {
   "name": "test-ya",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Test Ya",
   "main": "build/index.js",
   "type": "module",
