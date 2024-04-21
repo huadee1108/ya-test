@@ -82,7 +82,7 @@ export class Executor {
           message: "Workflow start running.",
         });
       }
-      console.log(step);
+      // console.log(step);
       const { key, value, path } = this.executeList[step];
       // replace variables
       if (typeof value === "string" && value.startsWith("$")) {
