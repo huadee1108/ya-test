@@ -74,7 +74,7 @@ export class Executor {
         this.setLogs && this.setLogs((state: any) => [...state, endLog]);
         return;
       }
-      console.log(step, this.isPause);
+
       this.currentStep = step;
       if (this.isPause) return;
       if (this.isStop) {
