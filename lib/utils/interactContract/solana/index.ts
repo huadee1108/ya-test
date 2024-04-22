@@ -24,7 +24,7 @@ const interactContractSolana = async (
   abiOrIdl: Record<string, any[] | Record<string, any>>,
   provider: any,
   solanaRpc: string,
-  logs: logItem[],
+  logs: any,
   uuid: string
 ) => {
   if (action) {
@@ -201,13 +201,14 @@ const interactContractSolana = async (
     await connection.confirmTransaction(res, "finalized");
     action.txid = res;
     action.status = "completed";
-    logs.push({
+    const actionLog: logItem = {
       type: "action",
       timeStamp: Date.now(),
       runId: uuid,
       code: action,
       message: JSON.stringify(action, null, 2),
-    });
+    };
+    logs && logs((state: any) => [...state, actionLog]);
   }
 };
 

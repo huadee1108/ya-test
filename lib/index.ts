@@ -35,13 +35,14 @@ export class Executor {
   isStop: boolean = false;
   uuid: string = "";
   setActionNetwork: any;
-  logs: logItem[] = [];
+  setLogs: any;
   constructor(
     bql: string,
     abiOrIdl: Record<string, any[] | Record<string, any>>,
     provider: any,
     account: string,
     setActionNetwork: any,
+    setLogs?: any,
     solanaRpc?: string
   ) {
     this.bql = bql;
@@ -52,6 +53,7 @@ export class Executor {
     this.provider = provider;
     this.account = account;
     this.setActionNetwork = setActionNetwork;
+    this.setLogs = setLogs;
     this.solanaRpc = solanaRpc || "";
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
@@ -59,13 +61,15 @@ export class Executor {
   async run(step = 0, continuousExecution = true) {
     try {
       if (step >= this.executeList.length) {
-        this.logs.push({
+        // end log
+        const endLog: logItem = {
           type: "end",
           timeStamp: Date.now(),
           runId: this.uuid,
           code: this.executeList[step - 1],
           message: "Workflow stop running.",
-        });
+        };
+        this.setLogs && this.setLogs((state: any) => [...state, endLog]);
         return;
       }
       console.log(step, this.isPause);
@@ -76,17 +80,22 @@ export class Executor {
         return;
       }
 
-      const notStart =
-        this.logs.find((item) => item.type === "start") === undefined;
-      if (notStart) {
-        this.logs.push({
-          type: "start",
-          timeStamp: Date.now(),
-          runId: this.uuid,
-          code: this.executeList[step],
-          message: "Workflow start running.",
+      //start log
+      const startLog: logItem = {
+        type: "start",
+        timeStamp: Date.now(),
+        runId: this.uuid,
+        code: this.executeList[step],
+        message: "Workflow start running.",
+      };
+      this.setLogs &&
+        this.setLogs((state: any) => {
+          const notStart =
+            state.find((item: any) => item.type === "start") === undefined;
+          const returnLogs = [...state];
+          if (notStart) returnLogs.push(startLog);
+          return returnLogs;
         });
-      }
 
       const { key, value, path } = this.executeList[step];
       // replace variables
@@ -102,7 +111,7 @@ export class Executor {
       // return network
       if (key === "network") {
         this.setActionNetwork(value);
-        await delay(500);
+        await delay(100);
       }
 
       // interact contract
@@ -115,7 +124,7 @@ export class Executor {
             this.abiOrIdl,
             this.provider,
             this.solanaRpc,
-            this.logs,
+            this.setLogs,
             this.uuid
           );
         } else {
@@ -125,7 +134,7 @@ export class Executor {
             this.abiOrIdl,
             this.provider,
             this.account,
-            this.logs,
+            this.setLogs,
             this.uuid
           );
         }
@@ -136,25 +145,38 @@ export class Executor {
         await this.run(nextStep);
       }
     } catch (error: any) {
-      const notError =
-        this.logs.find((item) => item.type === "error") === undefined;
-      notError &&
-        this.logs.push({
-          type: "error",
-          timeStamp: Date.now(),
-          runId: this.uuid,
-          code: this.executeList[this.currentStep],
-          message: error?.data?.message || error?.message || error,
+      // error log
+      const errorLog: logItem = {
+        type: "error",
+        timeStamp: Date.now(),
+        runId: this.uuid,
+        code: this.executeList[this.currentStep],
+        message: error?.data?.message || error?.message || error,
+      };
+      this.setLogs &&
+        this.setLogs((state: any) => {
+          const notStart =
+            state.find((item: any) => item.type === "error") === undefined;
+          const returnLogs = [...state];
+          if (notStart) returnLogs.push(errorLog);
+          return returnLogs;
         });
-      const notEnd =
-        this.logs.find((item) => item.type === "end") === undefined;
-      notEnd &&
-        this.logs.push({
-          type: "end",
-          timeStamp: Date.now(),
-          runId: this.uuid,
-          code: this.executeList[this.currentStep],
-          message: "Workflow stop running.",
+
+      // end log
+      const endLog: logItem = {
+        type: "end",
+        timeStamp: Date.now(),
+        runId: this.uuid,
+        code: this.executeList[this.currentStep],
+        message: "Workflow stop running.",
+      };
+      this.setLogs &&
+        this.setLogs((state: any) => {
+          const notStart =
+            state.find((item: any) => item.type === "error") === undefined;
+          const returnLogs = [...state];
+          if (notStart) returnLogs.push(endLog);
+          return returnLogs;
         });
       // throw the bottom-level message
       throw new Error(error?.data?.message || error?.message || error);
@@ -165,7 +187,6 @@ export class Executor {
   }
   async resume() {
     this.isPause = false;
-    this.currentStep;
     await this.run(this.currentStep);
   }
   stop() {

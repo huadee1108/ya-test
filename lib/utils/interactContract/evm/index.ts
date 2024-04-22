@@ -10,7 +10,7 @@ const interactContractEvm = async (
   abiOrIdl: Record<string, any[] | Record<string, any>>,
   provider: any,
   account: string,
-  logs: logItem[],
+  logs: any,
   uuid: string
 ) => {
   if (action) {
@@ -73,13 +73,14 @@ const interactContractEvm = async (
         }
       }
     }
-    logs.push({
+    const actionLog: logItem = {
       type: "action",
       timeStamp: Date.now(),
       runId: uuid,
       code: action,
       message: JSON.stringify(action, null, 2),
-    });
+    };
+    logs && logs((state: any) => [...state, actionLog]);
   }
 };
 
