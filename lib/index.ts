@@ -163,10 +163,10 @@ export class Executor {
   pause() {
     this.isPause = true;
   }
-  resume() {
+  async resume() {
     this.isPause = false;
     this.currentStep;
-    this.run(this.currentStep);
+    await this.run(this.currentStep);
   }
   stop() {
     this.isStop = true;
