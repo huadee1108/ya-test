@@ -39,27 +39,29 @@ export class Executor {
   constructor(
     bql: string,
     abiOrIdl: Record<string, any[] | Record<string, any>>,
-    provider: any,
-    account: string,
     setActionNetwork: any,
     setLogs?: any,
     solanaRpc?: string
   ) {
     this.bql = bql;
     const bqlObj = yaml.load(bql);
-    const wrapObj = { ADDRESS: account, ...publicVariable, ...bqlObj };
+    const wrapObj = { ...publicVariable, ...bqlObj };
     this.context = wrapObj;
     this.abiOrIdl = abiOrIdl;
-    this.provider = provider;
-    this.account = account;
     this.setActionNetwork = setActionNetwork;
     this.setLogs = setLogs;
     this.solanaRpc = solanaRpc || "";
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
   }
-  async run(step = 0, continuousExecution = true) {
+  async run(
+    provider: any,
+    account: string,
+    step = 0,
+    continuousExecution = true
+  ) {
     try {
+      this.context["ADDRESS"] = account;
       if (step >= this.executeList.length) {
         // end log
         const endLog: logItem = {
@@ -122,7 +124,7 @@ export class Executor {
           await interactContractSolana(
             action,
             this.abiOrIdl,
-            this.provider,
+            provider,
             this.solanaRpc,
             this.setLogs,
             this.uuid
@@ -132,8 +134,8 @@ export class Executor {
             action,
             this.context,
             this.abiOrIdl,
-            this.provider,
-            this.account,
+            provider,
+            account,
             this.setLogs,
             this.uuid
           );
@@ -142,7 +144,7 @@ export class Executor {
 
       if (continuousExecution) {
         const nextStep = step + 1;
-        await this.run(nextStep);
+        await this.run(provider, account, nextStep);
       }
     } catch (error: any) {
       // error log
@@ -185,9 +187,9 @@ export class Executor {
   pause() {
     this.isPause = true;
   }
-  async resume() {
+  async resume(provider: any, account: string) {
     this.isPause = false;
-    await this.run(this.currentStep);
+    await this.run(provider, account, this.currentStep);
   }
   stop() {
     this.isStop = true;
