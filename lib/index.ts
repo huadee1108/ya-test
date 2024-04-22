@@ -107,7 +107,6 @@ export class Executor {
 
       // interact contract
       if (key === "action") {
-        console.log("xx");
         const pathValue = getValueByPath(this.context, path);
         const action = pathValue && pathValue[key];
         if (action?.network === "solana") {
@@ -166,7 +165,8 @@ export class Executor {
   }
   resume() {
     this.isPause = false;
-    this.run(this.currentStep + 1);
+    this.currentStep;
+    this.run(this.currentStep);
   }
   stop() {
     this.isStop = true;
