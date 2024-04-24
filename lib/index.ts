@@ -68,6 +68,9 @@ export class Executor {
       this.setLogs && this.setLogs((state: any) => [...state, paramsLog]);
       throw new Error(error);
     }
+    if (this.context.params && params) {
+      this.context.params = params;
+    }
   }
   async run(
     provider: any,
