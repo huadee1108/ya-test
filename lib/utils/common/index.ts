@@ -6,6 +6,7 @@ import isNormalObject from "./isNormalObject.js";
 import getParentValueAndKeyByPath from "./getParentValueAndKeyByPath.js";
 import getUuid from "./getUuid.js";
 import delay from "./delay.js";
+import validateParams from "./validateParams.js";
 
 export {
   getValueByPath,
@@ -16,4 +17,5 @@ export {
   getParentValueAndKeyByPath,
   getUuid,
   delay,
+  validateParams,
 };

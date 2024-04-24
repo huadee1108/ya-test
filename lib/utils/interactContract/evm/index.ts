@@ -36,6 +36,10 @@ const interactContractEvm = async (
       const hasValue =
         action.value && !isNaN(action.value) && action.value !== "0";
       if (action.params) {
+        // number to number string
+        for (const key in action.params) {
+          action.params[key] = "" + action.params[key];
+        }
         const hasSameNameFunc =
           abi.filter((item: any) => item.name === action.call).length > 1;
 

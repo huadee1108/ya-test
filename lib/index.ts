@@ -6,6 +6,7 @@ import {
   getUuid,
   getValueByPath,
   delay,
+  validateParams,
 } from "./utils/common/index.js";
 import { ListItem } from "./utils/common/transferObjToList.js";
 import {
@@ -15,7 +16,7 @@ import {
 import { publicVariable } from "./config/index.js";
 
 export interface logItem {
-  type: "start" | "end" | "action" | "error";
+  type: "start" | "end" | "params" | "action" | "error";
   timeStamp: number;
   runId: string;
   code: any;
@@ -40,8 +41,9 @@ export class Executor {
     bql: string,
     abiOrIdl: Record<string, any[] | Record<string, any>>,
     setActionNetwork: any,
-    setLogs?: any,
-    solanaRpc?: string
+    solanaRpc?: string,
+    params?: any,
+    setLogs?: any
   ) {
     this.bql = bql;
     const bqlObj = yaml.load(bql);
@@ -53,6 +55,19 @@ export class Executor {
     this.solanaRpc = solanaRpc || "";
     this.uuid = getUuid();
     this.executeList = transferObjToList(this.context);
+    const error = validateParams(this.context, params);
+    if (error) {
+      // params log
+      const paramsLog: logItem = {
+        type: "params",
+        timeStamp: Date.now(),
+        runId: this.uuid,
+        code: this.context.params,
+        message: error,
+      };
+      this.setLogs && this.setLogs((state: any) => [...state, paramsLog]);
+      throw new Error(error);
+    }
   }
   async run(
     provider: any,
