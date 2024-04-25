@@ -14,7 +14,7 @@ import lt from "./lt.js";
 import lte from "./lte.js";
 import eq from "./eq.js";
 
-const funcs: Record<string, any> = {
+const operationFuncs: Record<string, any> = {
   add,
   minus,
   mul,
@@ -32,4 +32,4 @@ const funcs: Record<string, any> = {
   eq,
 };
 
-export default funcs;
+export default operationFuncs;
