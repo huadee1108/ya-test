@@ -1,6 +1,7 @@
 import isNormalObject from "./isNormalObject.js";
 
 const validateParams = (context: Record<string, any>, params: any) => {
+  if (!context.params || !Array.isArray(context.params)) return "";
   for (const item of context.params) {
     if (item.required) {
       if (!params || !params[item.name]) {
