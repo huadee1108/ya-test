@@ -1,4 +1,4 @@
-import funcs from "../Funcs/index.js";
+import funcs from "../funcs/index.js";
 import getParentValueAndKeyByPath from "./getParentValueAndKeyByPath.js";
 import getValueByPath from "./getValueByPath.js";
 const functionParser = (
