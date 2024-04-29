@@ -32,8 +32,8 @@ const interactContractSolana = async (
     let res;
     if (action.protocol === "NativeToken") {
       // transfer SOL Token
-      const fromPublicKey = new PublicKey(action?.params?.from || "");
-      const toPublicKey = new PublicKey(action?.params?.to || "");
+      const fromPublicKey = action?.params?.from;
+      const toPublicKey = action?.params?.to;
       const transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: fromPublicKey,
@@ -49,8 +49,8 @@ const interactContractSolana = async (
       res = resObj.signature;
     } else if (action.protocol === "SPL") {
       // transfer SPL Token
-      const fromPublicKey = new PublicKey(action?.params?.from || "");
-      const toPublicKey = new PublicKey(action?.params?.to || "");
+      const fromPublicKey = action?.params?.from;
+      const toPublicKey = action?.params?.to;
       const contractPublicKey = new PublicKey(action.contract);
       const sourceAccount = await getOrCreateAssociatedTokenAccount(
         connection,
@@ -119,7 +119,6 @@ const interactContractSolana = async (
       const resObj = await provider.signAndSendTransaction(transaction);
       res = resObj.signature;
     } else {
-      console.log(action);
       const isEmpty =
         Object.entries(abiOrIdl).length === 0 &&
         abiOrIdl.constructor === Object;
