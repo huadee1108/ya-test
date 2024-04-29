@@ -165,6 +165,7 @@ export class Executor {
         await this.run(provider, account, nextStep);
       }
     } catch (error: any) {
+      console.log(this.context);
       // error log
       const errorLog: logItem = {
         type: "error",
