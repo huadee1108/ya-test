@@ -119,6 +119,7 @@ const interactContractSolana = async (
       const resObj = await provider.signAndSendTransaction(transaction);
       res = resObj.signature;
     } else {
+      console.log(action);
       const isEmpty =
         Object.entries(abiOrIdl).length === 0 &&
         abiOrIdl.constructor === Object;
@@ -148,44 +149,7 @@ const interactContractSolana = async (
           delete params[key];
         }
       }
-      const instructions = idl.instructions;
-      const funObj = instructions.find(
-        (item: any) => item.name === action.call
-      );
-      let fields = [];
-      if (funObj.args?.length) {
-        if (funObj.args[0]?.type?.defined) {
-          const typeDefined = funObj.args[0]?.type?.defined;
-          const funcArg = idl.types.find(
-            (item: any) => item.name === typeDefined
-          );
-          fields = funcArg?.type?.fields;
-        } else {
-          fields = funObj.args;
-        }
-      }
-      for (const [key, value] of Object.entries(params)) {
-        const currObj = fields.find((item: any) => item.name === key);
-        if (
-          currObj.type === "publicKey" ||
-          currObj.type?.option === "publicKey"
-        ) {
-          params[key] = new PublicKey(value as any);
-        }
-        if (
-          currObj.type?.includes("u") ||
-          currObj.type?.option?.includes("u")
-        ) {
-          params[key] = new anchor.BN(value as any);
-        }
-      }
       const accounts = action.accounts;
-      if (accounts && isNormalObject(accounts)) {
-        for (const [key, value] of Object.entries(accounts)) {
-          accounts[key] = value ? new PublicKey(value) : value;
-        }
-      }
-
       if (params && Object.keys(params).length) {
         const isAccounts = accounts && isNormalObject(accounts);
         res = await program.methods?.[action.call]?.(params)

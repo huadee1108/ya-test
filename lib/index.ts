@@ -125,7 +125,7 @@ export class Executor {
 
       // function parsing
       if (typeof key === "string" && key.startsWith("_")) {
-        functionParser(key, path, this.context);
+        await functionParser(key, path, this.context, this.abiOrIdl);
       }
 
       // return network
